@@ -3,6 +3,8 @@ import {
   AlertCircle, Activity, Heart, ShieldAlert, 
   Syringe, Info, ChevronRight, Stethoscope
 } from 'lucide-react';
+import SpirometryAnalyzer from './components/SpirometryAnalyzer';
+
 // --- 1. TYPE DEFINITIONS ---
 type TreatmentRegimen = "NONE" | "SABA_SAMA_ONLY" | "LABA" | "LAMA" | "LABA_ICS" | "LABA_LAMA" | "LABA_LAMA_ICS";
 interface PatientData {
@@ -414,6 +416,10 @@ Code
     </section>
   </main>
 
+  <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-200">
+     <SpirometryAnalyzer />
+  </div>
+  
   <footer className="max-w-6xl mx-auto mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-400 font-medium pb-8 flex flex-col items-center">
     <Info className="w-5 h-5 mb-2 text-slate-300" />
     <p>Acest instrument este strict educațional și destinat profesioniștilor din domeniul sănătății.</p>
