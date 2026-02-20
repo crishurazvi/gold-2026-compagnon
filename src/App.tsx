@@ -10,6 +10,8 @@ import AsthmaManager from './components/AsthmaManager';
 import SpirometryAnalyzer from './components/SpirometryAnalyzer';
 import SleepApneaScreening from './components/SleepApneaScreening';
 import NoduleCalculator from './components/NoduleCalculator';
+import InhalerGallery from './components/InhalerGallery';
+
 
 // --- CONFIGURAȚIA PAGINILOR (Aici adaugi pagini noi) ---
 const PAGES = [
@@ -42,6 +44,12 @@ const PAGES = [
     label: 'Noduli (Fleischner)', 
     icon: <Scan className="w-5 h-5"/>,
     component: <NoduleCalculator /> 
+  },
+  { 
+    id: 'inhalers', 
+    label: 'Ghid Inhalatoare', 
+    icon: <Syringe className="w-5 h-5"/>, // Sau importă 'Pill'/'BookOpen' din lucide-react în App.tsx și folosește-l
+    component: <InhalerGallery /> 
   },
 ];
 
