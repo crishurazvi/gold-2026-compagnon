@@ -169,8 +169,6 @@ setData(prev => ({ ...prev, exacerbations: { moderateOrSevere: value } }));
 };
 return (
 <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
-code
-Code
 <header className="max-w-6xl mx-auto mb-8 flex items-center space-x-3">
     <Activity className="w-10 h-10 text-blue-600" />
     <div>
