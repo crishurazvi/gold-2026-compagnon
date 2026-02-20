@@ -4,11 +4,12 @@ import {
   Syringe, Info, ChevronRight, Stethoscope
 } from 'lucide-react';
 
-// Importăm componentele create anterior
+// --- IMPORTS ---
 import SpirometryAnalyzer from './components/SpirometryAnalyzer';
 import AsthmaManager from './components/AsthmaManager';
+import SleepApneaScreening from './components/SleepApneaScreening'; // <--- IMPORT NOU
 
-// --- 1. TYPE DEFINITIONS ---
+// --- 1. TYPE DEFINITIONS (BPOC) ---
 type TreatmentRegimen = "NONE" | "SABA_SAMA_ONLY" | "LABA" | "LAMA" | "LABA_ICS" | "LABA_LAMA" | "LABA_LAMA_ICS";
 
 interface PatientData {
@@ -39,7 +40,7 @@ interface EvaluationResult {
   warnings: string[];
 }
 
-// --- 2. LOGIC ENGINE (GOLD 2026) ---
+// --- 2. LOGIC ENGINE (BPOC GOLD 2026) ---
 function evaluateCOPD(patient: PatientData): EvaluationResult {
   const result: EvaluationResult = {
     isCOPDConfirmed: false,
@@ -65,7 +66,6 @@ function evaluateCOPD(patient: PatientData): EvaluationResult {
   const hasHighSymptoms = patient.mMRC >= 2 || patient.catScoreTotal >= 10;
   result.symptomBurden = hasHighSymptoms ? "HIGH" : "LOW";
 
-  // GOLD 2026 Update: Group E is >= 1 moderate/severe exacerbation
   const isGroupE = patient.exacerbations.moderateOrSevere >= 1;
   result.patientGroup = isGroupE ? "E" : (hasHighSymptoms ? "B" : "A");
 
@@ -73,7 +73,6 @@ function evaluateCOPD(patient: PatientData): EvaluationResult {
     result.warnings.push("Pacientul asociază trăsături de ASTM. Terapia cu ICS este obligatorie!");
   }
 
-  // TREATMENT LOGIC
   if (patient.isTreatmentNaive) {
     if (result.patientGroup === "A") {
       result.recommendations.primary = "Un Bronhodilatator (SABD sau LABD)";
@@ -92,14 +91,13 @@ function evaluateCOPD(patient: PatientData): EvaluationResult {
     }
   } else {
     const target = patient.followUpTarget;
-    
     if (patient.currentTreatment === "LABA_ICS") {
       if (target === "EXACERBATIONS" || target === "BOTH") {
         if (patient.bloodEosinophils >= 100) {
           result.recommendations.primary = "Escaladare la LABA + LAMA + ICS";
         } else {
           result.recommendations.primary = "Schimbare pe LABA + LAMA (De-escaladare ICS)";
-          result.warnings.push("Se recomandă oprirea ICS dacă eozinofilele sunt < 100 cel/µL (lipsă de beneficiu + risc pneumonie).");
+          result.warnings.push("Se recomandă oprirea ICS dacă eozinofilele sunt < 100 cel/µL.");
         }
       } else {
         result.recommendations.primary = "Treci pe LABA+LAMA sau Triplă Terapie";
@@ -111,7 +109,6 @@ function evaluateCOPD(patient: PatientData): EvaluationResult {
         result.recommendations.primary = "Escaladare la LABA + LAMA";
       } else {
         result.recommendations.primary = "Optimizează tratamentul non-farmacologic";
-        result.recommendations.details.push("Reabilitare pulmonară, verifică tehnica de inhalare, investighează alte cauze.");
         result.recommendations.addons.push("Adaugă Ensifentrine (inhibitor PDE3/4) dacă este disponibil.");
       }
     } 
@@ -122,28 +119,21 @@ function evaluateCOPD(patient: PatientData): EvaluationResult {
       else if (patient.currentTreatment === "LABA_LAMA") {
         if (patient.bloodEosinophils >= 100) {
           result.recommendations.primary = "Escaladare la LABA + LAMA + ICS";
-          result.recommendations.details.push(`Răspuns favorabil așteptat la ICS având eozinofile = ${patient.bloodEosinophils}.`);
         } else {
           result.recommendations.primary = "Menține LABA + LAMA și adaugă adjuvanți";
           if (patient.postBdFev1Percent < 50 && patient.hasChronicBronchitis) {
-            result.recommendations.addons.push("Roflumilast (indicat pentru FEV1 < 50% și bronșită cronică).");
+            result.recommendations.addons.push("Roflumilast");
           }
           if (patient.smokingStatus === "EX_SMOKER") {
-            result.recommendations.addons.push("Azitromicină (macrolid long-term).");
+            result.recommendations.addons.push("Azitromicină");
           }
         }
       } 
       else if (patient.currentTreatment === "LABA_LAMA_ICS") {
         result.recommendations.primary = "Menține Tripla Terapie + Fenotipare";
-        if (patient.postBdFev1Percent < 50 && patient.hasChronicBronchitis) {
-          result.recommendations.addons.push("Roflumilast");
-        }
-        if (patient.smokingStatus === "EX_SMOKER") {
-          result.recommendations.addons.push("Azitromicină");
-        }
-        if (patient.bloodEosinophils >= 300) {
-          result.recommendations.addons.push("Terapie Biologică: Mepolizumab sau Dupilumab (dacă are bronșită cronică).");
-        }
+        if (patient.postBdFev1Percent < 50 && patient.hasChronicBronchitis) result.recommendations.addons.push("Roflumilast");
+        if (patient.smokingStatus === "EX_SMOKER") result.recommendations.addons.push("Azitromicină");
+        if (patient.bloodEosinophils >= 300) result.recommendations.addons.push("Terapie Biologică (Mepolizumab/Dupilumab).");
       }
     }
   }
@@ -157,10 +147,10 @@ function evaluateCOPD(patient: PatientData): EvaluationResult {
 
 // --- 3. MAIN REACT COMPONENT ---
 export default function App() {
-  // State pentru navigare (Tabs)
-  const [activeTab, setActiveTab] = useState<'copd' | 'asthma' | 'spiro'>('copd');
+  // UPDATED: Added 'sleep' to tabs
+  const [activeTab, setActiveTab] = useState<'copd' | 'asthma' | 'spiro' | 'sleep'>('copd');
 
-  // State pentru BPOC Logic
+  // State pentru BPOC
   const [data, setData] = useState<PatientData>({
     postBdfEv1FvcRatio: 0.65,
     postBdFev1Percent: 55,
@@ -193,25 +183,31 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
       
-      {/* NAVIGATION BAR */}
-      <nav className="max-w-6xl mx-auto mb-6 bg-white p-2 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-2 sticky top-2 z-50">
+      {/* NAVIGATION BAR - UPDATED with Sleep Button */}
+      <nav className="max-w-6xl mx-auto mb-6 bg-white p-2 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-2 sticky top-2 z-50 overflow-x-auto">
         <button 
           onClick={() => setActiveTab('copd')}
-          className={`flex-1 md:flex-none px-6 py-2 rounded-xl font-bold transition-all duration-200 text-sm md:text-base ${activeTab === 'copd' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+          className={`whitespace-nowrap flex-1 md:flex-none px-4 py-2 rounded-xl font-bold transition-all duration-200 text-sm md:text-base ${activeTab === 'copd' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
         >
-          BPOC (GOLD 2026)
+          BPOC (GOLD)
         </button>
         <button 
           onClick={() => setActiveTab('asthma')}
-          className={`flex-1 md:flex-none px-6 py-2 rounded-xl font-bold transition-all duration-200 text-sm md:text-base ${activeTab === 'asthma' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+          className={`whitespace-nowrap flex-1 md:flex-none px-4 py-2 rounded-xl font-bold transition-all duration-200 text-sm md:text-base ${activeTab === 'asthma' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
         >
-          Astm (GINA 2024)
+          Astm (GINA)
         </button>
         <button 
           onClick={() => setActiveTab('spiro')}
-          className={`flex-1 md:flex-none px-6 py-2 rounded-xl font-bold transition-all duration-200 text-sm md:text-base ${activeTab === 'spiro' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+          className={`whitespace-nowrap flex-1 md:flex-none px-4 py-2 rounded-xl font-bold transition-all duration-200 text-sm md:text-base ${activeTab === 'spiro' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
         >
           Spirometrie
+        </button>
+        <button 
+          onClick={() => setActiveTab('sleep')}
+          className={`whitespace-nowrap flex-1 md:flex-none px-4 py-2 rounded-xl font-bold transition-all duration-200 text-sm md:text-base ${activeTab === 'sleep' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+        >
+          Somn (SAS)
         </button>
       </nav>
 
@@ -227,10 +223,7 @@ export default function App() {
           </header>
 
           <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            {/* LEFT COLUMN: INPUT FORM */}
             <section className="lg:col-span-5 space-y-6">
-              
               {/* Card 1: Spirometrie */}
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h2 className="flex items-center text-lg font-semibold mb-4 text-slate-800">
@@ -250,7 +243,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Card 2: Simptome & Exacerbari */}
+              {/* Card 2: Simptome */}
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <h2 className="flex items-center text-lg font-semibold mb-4 text-slate-800">
                   <Heart className="w-5 h-5 mr-2 text-rose-500"/> 2. Clinic & Istoric
@@ -289,14 +282,12 @@ export default function App() {
                 <h2 className="flex items-center text-lg font-semibold mb-4 text-slate-800">
                   <Syringe className="w-5 h-5 mr-2 text-teal-500"/> 3. Fenotip & Tratament
                 </h2>
-                
                 <div className="space-y-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-500 mb-1">Eozinofile sânge (celule/µL)</label>
                     <input type="number" value={data.bloodEosinophils} onChange={(e) => handleChange('bloodEosinophils', parseInt(e.target.value))} 
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 transition-all"/>
                   </div>
-
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <label className="flex items-center space-x-2 p-2 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer">
                       <input type="checkbox" checked={data.hasChronicBronchitis} onChange={(e) => handleChange('hasChronicBronchitis', e.target.checked)} className="rounded text-blue-600 focus:ring-blue-500"/>
@@ -307,7 +298,6 @@ export default function App() {
                       <span className="font-medium text-slate-700">Astm Concomitent</span>
                     </label>
                   </div>
-
                   <div>
                     <label className="block text-xs font-semibold text-slate-500 mb-1">Status Fumat</label>
                     <select value={data.smokingStatus} onChange={(e) => handleChange('smokingStatus', e.target.value)} 
@@ -317,13 +307,11 @@ export default function App() {
                       <option value="NEVER_SMOKER">Nefumător</option>
                     </select>
                   </div>
-
                   <div className="border-t border-slate-100 pt-4 mt-2">
                     <label className="flex items-center space-x-2 mb-3 cursor-pointer">
                       <input type="checkbox" checked={data.isTreatmentNaive} onChange={(e) => handleChange('isTreatmentNaive', e.target.checked)} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"/>
-                      <span className="font-bold text-slate-800">Pacient Naiv Terapeutic (Inițiere)</span>
+                      <span className="font-bold text-slate-800">Pacient Naiv (Inițiere)</span>
                     </label>
-
                     {!data.isTreatmentNaive && (
                       <div className="space-y-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50">
                         <div>
@@ -334,7 +322,7 @@ export default function App() {
                             <option value="LAMA">LAMA monoterapie</option>
                             <option value="LABA_ICS">LABA + ICS</option>
                             <option value="LABA_LAMA">LABA + LAMA</option>
-                            <option value="LABA_LAMA_ICS">LABA + LAMA + ICS (Triplă)</option>
+                            <option value="LABA_LAMA_ICS">LABA + LAMA + ICS</option>
                           </select>
                         </div>
                         <div>
@@ -353,10 +341,7 @@ export default function App() {
               </div>
             </section>
 
-
-            {/* RIGHT COLUMN: RESULTS DASHBOARD */}
             <section className="lg:col-span-7 space-y-6">
-              
               {!result.isCOPDConfirmed ? (
                 <div className="bg-rose-50 border-l-4 border-rose-500 p-6 rounded-r-2xl shadow-sm flex items-start space-x-4">
                   <ShieldAlert className="w-8 h-8 text-rose-500 flex-shrink-0" />
@@ -368,7 +353,6 @@ export default function App() {
                 </div>
               ) : (
                 <>
-                  {/* Classification Badges */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
                       <div>
@@ -379,7 +363,6 @@ export default function App() {
                         <Activity className="w-6 h-6 text-slate-500"/>
                       </div>
                     </div>
-
                     <div className={`p-5 rounded-2xl shadow-sm border flex items-center justify-between ${
                       result.patientGroup === 'E' ? 'bg-rose-50 border-rose-200' : 
                       result.patientGroup === 'B' ? 'bg-amber-50 border-amber-200' : 
@@ -407,7 +390,6 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Warnings */}
                   {result.warnings.length > 0 && (
                     <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-start space-x-3">
                       <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -419,13 +401,11 @@ export default function App() {
                     </div>
                   )}
 
-                  {/* Main Treatment Recommendation */}
                   <div className="bg-blue-600 p-6 rounded-2xl shadow-lg shadow-blue-600/20 text-white transform transition-all duration-300">
                     <p className="text-blue-200 font-semibold text-sm uppercase tracking-wider mb-2">
                       {data.isTreatmentNaive ? "Tratament Inițial Recomandat" : "Decizie Follow-up (GOLD 2026)"}
                     </p>
                     <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight">{result.recommendations.primary}</h3>
-                    
                     {result.recommendations.details.length > 0 && (
                       <ul className="space-y-2 mt-4 pt-4 border-t border-blue-500/50">
                         {result.recommendations.details.map((detail, idx) => (
@@ -438,7 +418,6 @@ export default function App() {
                     )}
                   </div>
 
-                  {/* Add-ons / Biologics */}
                   {result.recommendations.addons.length > 0 && (
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-purple-200">
                       <h3 className="text-lg font-bold text-purple-900 flex items-center mb-4">
@@ -459,7 +438,6 @@ export default function App() {
                   )}
                 </>
               )}
-
             </section>
           </main>
 
@@ -482,6 +460,13 @@ export default function App() {
       {activeTab === 'spiro' && (
         <div className="max-w-6xl mx-auto">
           <SpirometryAnalyzer />
+        </div>
+      )}
+      
+      {/* --- TAB CONTENT: SLEEP (NEW) --- */}
+      {activeTab === 'sleep' && (
+        <div className="max-w-6xl mx-auto">
+          <SleepApneaScreening />
         </div>
       )}
       
