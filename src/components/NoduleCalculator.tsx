@@ -40,7 +40,8 @@ export default function NoduleCalculator() {
         <Scan className="w-8 h-8 text-indigo-600" />
         <div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Management Noduli Pulmonari</h2>
-          <p className="text-sm text-slate-500 font-medium">Ghidul Fleischner Society 2017 (Pacienți > 35 ani)</p>
+          {/* FIX: Am inlocuit > cu &gt; */}
+          <p className="text-sm text-slate-500 font-medium">Ghidul Fleischner Society 2017 (Pacienți &gt; 35 ani)</p>
         </div>
       </header>
 
@@ -143,7 +144,8 @@ export default function NoduleCalculator() {
 
            <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-sm text-blue-800 flex items-start space-x-2">
              <HelpCircle className="w-5 h-5 flex-shrink-0" />
-             <p>Recomandările se aplică nodulilor incidentali. Nu se aplică pentru screening cancer pulmonar (LUNG-RADS), pacienți < 35 ani sau pacienți cu cancer cunoscut (metastaze).</p>
+             {/* FIX: Am inlocuit < cu &lt; */}
+             <p>Recomandările se aplică nodulilor incidentali. Nu se aplică pentru screening cancer pulmonar (LUNG-RADS), pacienți &lt; 35 ani sau pacienți cu cancer cunoscut (metastaze).</p>
            </div>
         </section>
       </div>
