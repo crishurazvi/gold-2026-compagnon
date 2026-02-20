@@ -170,7 +170,7 @@ return (
 code
 Code
 <header className="max-w-6xl mx-auto mb-8 flex items-center space-x-3">
-    <Lungs className="w-10 h-10 text-blue-600" />
+    <Activity className="w-10 h-10 text-blue-600" />
     <div>
       <h1 className="text-2xl font-bold text-slate-900 tracking-tight">GOLD COPD 2026</h1>
       <p className="text-sm text-slate-500 font-medium">Clinical Decision Support Tool</p>
@@ -204,7 +204,7 @@ Code
       {/* Card 2: Simptome & Exacerbari */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <h2 className="flex items-center text-lg font-semibold mb-4 text-slate-800">
-          <HeartPulse className="w-5 h-5 mr-2 text-rose-500"/> 2. Clinic & Istoric
+          <Heart className="w-5 h-5 mr-2 text-rose-500"/> 2. Clinic & Istoric
         </h2>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
