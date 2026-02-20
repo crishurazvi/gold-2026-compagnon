@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+// Importăm iconițele necesare
 import { 
-  Activity, Wind, Moon, Scan, LayoutGrid
+  Activity, Wind, Moon, Scan, LayoutGrid, BookOpen
 } from 'lucide-react';
 
-// --- IMPORTĂ TOATE PAGINILE ---
-// Asigură-te că ai fișierul CopdCalculator.tsx creat (vezi pasul 2)
+// --- IMPORTĂM COMPONENTELE ---
+// Asigură-te că fișierele există în folderul src/components/
 import CopdCalculator from './components/CopdCalculator'; 
 import AsthmaManager from './components/AsthmaManager';
 import SpirometryAnalyzer from './components/SpirometryAnalyzer';
@@ -12,8 +13,7 @@ import SleepApneaScreening from './components/SleepApneaScreening';
 import NoduleCalculator from './components/NoduleCalculator';
 import InhalerGallery from './components/InhalerGallery';
 
-
-// --- CONFIGURAȚIA PAGINILOR (Aici adaugi pagini noi) ---
+// --- DEFINIREA PAGINILOR ---
 const PAGES = [
   { 
     id: 'copd', 
@@ -46,9 +46,9 @@ const PAGES = [
     component: <NoduleCalculator /> 
   },
   { 
-    id: 'inhalers', 
+    id: 'inhaler', 
     label: 'Ghid Inhalatoare', 
-    icon: <Syringe className="w-5 h-5"/>, // Sau importă 'Pill'/'BookOpen' din lucide-react în App.tsx și folosește-l
+    icon: <BookOpen className="w-5 h-5"/>,
     component: <InhalerGallery /> 
   },
 ];
@@ -56,13 +56,13 @@ const PAGES = [
 export default function App() {
   const [activeTabId, setActiveTabId] = useState(PAGES[0].id);
 
-  // Găsim componenta activă
+  // Găsim pagina activă. Dacă apare o eroare aici, fallback pe prima pagină.
   const activePage = PAGES.find(p => p.id === activeTabId) || PAGES[0];
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row font-sans">
       
-      {/* SIDEBAR NAVIGATION (Desktop) / TOPBAR (Mobile) */}
+      {/* MENIU LATERAL (Desktop) / SUS (Mobil) */}
       <nav className="bg-white shadow-md z-20 md:w-64 md:min-h-screen flex-shrink-0 flex flex-col">
         <div className="p-6 border-b border-slate-100 hidden md:block">
           <h1 className="text-xl font-black text-slate-800 tracking-tight flex items-center">
@@ -74,7 +74,6 @@ export default function App() {
           <p className="text-xs text-slate-400 mt-1 font-medium pl-10">Cabinet Assistant</p>
         </div>
 
-        {/* Lista de butoane generate automat din PAGES */}
         <div className="flex overflow-x-auto md:flex-col p-2 gap-1 md:gap-2 no-scrollbar">
           {PAGES.map((page) => (
             <button
@@ -96,9 +95,10 @@ export default function App() {
         </div>
       </nav>
 
-      {/* CONTENT AREA */}
-      <main className="flex-1 p-2 md:p-6 overflow-y-auto h-screen">
-        <div className="max-w-5xl mx-auto animate-in fade-in duration-300">
+      {/* CONȚINUT PRINCIPAL */}
+      <main className="flex-1 p-2 md:p-6 overflow-y-auto h-screen bg-slate-100">
+        <div className="max-w-5xl mx-auto animate-in fade-in duration-300 pb-20">
+           {/* Aici randăm componenta selectată */}
            {activePage.component}
         </div>
         
