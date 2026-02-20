@@ -1,6 +1,7 @@
-import {
-AlertCircle, Activity, Lungs, HeartPulse, ShieldAlert,
-Syringe, Info, ChevronRight, Stethoscope
+import React, { useState, useEffect } from 'react';
+import { 
+  AlertCircle, Activity, Heart, ShieldAlert, 
+  Syringe, Info, ChevronRight, Stethoscope
 } from 'lucide-react';
 // --- 1. TYPE DEFINITIONS ---
 type TreatmentRegimen = "NONE" | "SABA_SAMA_ONLY" | "LABA" | "LAMA" | "LABA_ICS" | "LABA_LAMA" | "LABA_LAMA_ICS";
