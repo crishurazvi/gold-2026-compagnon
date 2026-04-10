@@ -80,9 +80,11 @@ export default function SleepApneaScreening() {
   };
 
   return (
-    <div className="w-full bg-slate-50 text-slate-800 font-sans p-4 md:p-8 rounded-3xl">
-      <header className="mb-8 flex items-center space-x-3">
-        <Moon className="w-8 h-8 text-indigo-600" />
+    <div className="w-full text-slate-800 font-sans">
+      <header className="mb-8 flex items-center space-x-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-violet-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/25 flex-shrink-0">
+          <Moon className="w-6 h-6 text-white" />
+        </div>
         <div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Screening Apnee în Somn</h2>
           <p className="text-sm text-slate-500 font-medium">STOP-BANG & Epworth Sleepiness Scale</p>
@@ -93,7 +95,7 @@ export default function SleepApneaScreening() {
         
         {/* PARTEA 1: STOP-BANG (Left Column on large screens) */}
         <section className="lg:col-span-7 space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 className="text-lg font-bold text-indigo-900 mb-4 flex items-center">
               <span className="bg-indigo-100 text-indigo-600 px-2 py-1 rounded-md text-sm mr-2">1</span> 
               Chestionar STOP-BANG
@@ -192,7 +194,7 @@ export default function SleepApneaScreening() {
           </div>
 
           {/* Scara Epworth */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 className="text-lg font-bold text-indigo-900 mb-4 flex items-center">
               <span className="bg-indigo-100 text-indigo-600 px-2 py-1 rounded-md text-sm mr-2">2</span> 
               Scara Epworth (Șansa de a ațipi)

@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-// Importăm iconițele necesare
 import { 
-  Activity, Wind, Moon, Scan, LayoutGrid, BookOpen
+  Activity, Wind, Moon, Scan, LayoutGrid, BookOpen, Menu, X
 } from 'lucide-react';
 
-// --- IMPORTĂM COMPONENTELE ---
-// Asigură-te că fișierele există în folderul src/components/
 import CopdCalculator from './components/CopdCalculator'; 
 import AsthmaManager from './components/AsthmaManager';
 import SpirometryAnalyzer from './components/SpirometryAnalyzer';
@@ -13,97 +10,135 @@ import SleepApneaScreening from './components/SleepApneaScreening';
 import NoduleCalculator from './components/NoduleCalculator';
 import InhalerGallery from './components/InhalerGallery';
 
-// --- DEFINIREA PAGINILOR ---
-const PAGES = [
-  { 
-    id: 'copd', 
-    label: 'BPOC (GOLD)', 
-    icon: <Activity className="w-5 h-5"/>,
-    component: <CopdCalculator /> 
-  },
-  { 
-    id: 'asthma', 
-    label: 'Astm (GINA)', 
-    icon: <Wind className="w-5 h-5"/>,
-    component: <AsthmaManager /> 
-  },
-  { 
-    id: 'spiro', 
-    label: 'Spirometrie', 
-    icon: <LayoutGrid className="w-5 h-5"/>,
-    component: <SpirometryAnalyzer /> 
-  },
-  { 
-    id: 'sleep', 
-    label: 'Somnologie', 
-    icon: <Moon className="w-5 h-5"/>,
-    component: <SleepApneaScreening /> 
-  },
-  { 
-    id: 'nodule', 
-    label: 'Noduli (Fleischner)', 
-    icon: <Scan className="w-5 h-5"/>,
-    component: <NoduleCalculator /> 
-  },
-  { 
-    id: 'inhaler', 
-    label: 'Ghid Inhalatoare', 
-    icon: <BookOpen className="w-5 h-5"/>,
-    component: <InhalerGallery /> 
-  },
+type PageIcon = typeof Activity;
+
+interface Page {
+  id: string;
+  label: string;
+  Icon: PageIcon;
+  gradient: string;
+  component: React.ReactNode;
+}
+
+const PAGES: Page[] = [
+  { id: 'copd',    label: 'BPOC (GOLD)',       Icon: Activity,   gradient: 'from-blue-400 to-blue-600',    component: <CopdCalculator /> },
+  { id: 'asthma',  label: 'Astm (GINA)',        Icon: Wind,       gradient: 'from-cyan-400 to-sky-600',     component: <AsthmaManager /> },
+  { id: 'spiro',   label: 'Spirometrie',         Icon: LayoutGrid, gradient: 'from-teal-400 to-emerald-600', component: <SpirometryAnalyzer /> },
+  { id: 'sleep',   label: 'Somnologie',          Icon: Moon,       gradient: 'from-violet-400 to-purple-600',component: <SleepApneaScreening /> },
+  { id: 'nodule',  label: 'Noduli (Fleischner)', Icon: Scan,       gradient: 'from-orange-400 to-rose-500',  component: <NoduleCalculator /> },
+  { id: 'inhaler', label: 'Ghid Inhalatoare',    Icon: BookOpen,   gradient: 'from-pink-400 to-rose-600',   component: <InhalerGallery /> },
 ];
 
 export default function App() {
   const [activeTabId, setActiveTabId] = useState(PAGES[0].id);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Găsim pagina activă. Dacă apare o eroare aici, fallback pe prima pagină.
   const activePage = PAGES.find(p => p.id === activeTabId) || PAGES[0];
 
+  const handleNav = (id: string) => {
+    setActiveTabId(id);
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row font-sans">
-      
-      {/* MENIU LATERAL (Desktop) / SUS (Mobil) */}
-      <nav className="bg-white shadow-md z-20 md:w-64 md:min-h-screen flex-shrink-0 flex flex-col">
-        <div className="p-6 border-b border-slate-100 hidden md:block">
-          <h1 className="text-xl font-black text-slate-800 tracking-tight flex items-center">
-             <div className="w-8 h-8 bg-blue-600 rounded-lg mr-2 flex items-center justify-center text-white">
-               <Activity className="w-5 h-5" />
-             </div>
-             PneumoTool
-          </h1>
-          <p className="text-xs text-slate-400 mt-1 font-medium pl-10">Cabinet Assistant</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-blue-50/30 flex flex-col md:flex-row font-sans">
+
+      {/* ── SIDEBAR (desktop) ── */}
+      <nav className="hidden md:flex flex-col w-72 flex-shrink-0 min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 shadow-2xl z-20">
+        {/* Logo */}
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <Activity className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-black text-white tracking-tight">PneumoTool</h1>
+              <p className="text-xs text-blue-300/70 font-medium">Cabinet Assistant</p>
+            </div>
+          </div>
         </div>
 
-        <div className="flex overflow-x-auto md:flex-col p-2 gap-1 md:gap-2 no-scrollbar">
-          {PAGES.map((page) => (
-            <button
-              key={page.id}
-              onClick={() => setActiveTabId(page.id)}
-              className={`
-                flex items-center whitespace-nowrap px-4 py-3 rounded-xl transition-all duration-200 text-sm font-bold
-                ${activeTabId === page.id 
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}
-              `}
-            >
-              <span className={`mr-3 ${activeTabId === page.id ? 'opacity-100' : 'opacity-70'}`}>
-                {page.icon}
-              </span>
-              {page.label}
-            </button>
-          ))}
+        {/* Nav items */}
+        <div className="flex flex-col p-3 gap-1 flex-1 mt-2 overflow-y-auto no-scrollbar">
+          {PAGES.map(({ id, label, Icon, gradient }) => {
+            const isActive = activeTabId === id;
+            return (
+              <button
+                key={id}
+                onClick={() => handleNav(id)}
+                className={`flex items-center px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold text-left border
+                  ${isActive
+                    ? 'bg-white/10 text-white border-white/10 shadow-lg'
+                    : 'text-slate-400 border-transparent hover:bg-white/5 hover:text-slate-200'}`}
+              >
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-all flex-shrink-0
+                  ${isActive ? `bg-gradient-to-br ${gradient} shadow-md` : 'bg-white/5'}`}>
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                </div>
+                <span className="flex-1">{label}</span>
+                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-white/10">
+          <p className="text-xs text-slate-500 text-center">© 2025 PneumoTool · Instrument educațional</p>
         </div>
       </nav>
 
-      {/* CONȚINUT PRINCIPAL */}
-      <main className="flex-1 p-2 md:p-6 overflow-y-auto h-screen bg-slate-100">
-        <div className="max-w-5xl mx-auto animate-in fade-in duration-300 pb-20">
-           {/* Aici randăm componenta selectată */}
-           {activePage.component}
+      {/* ── MOBILE TOP BAR ── */}
+      <header className="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3 bg-slate-900 shadow-xl">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
+            <Activity className="w-5 h-5 text-white" />
+          </div>
+          <span className="font-black text-white text-lg">PneumoTool</span>
         </div>
-        
-        <footer className="mt-12 text-center text-xs text-slate-400 py-6 border-t border-slate-200/50">
-           <p>© 2025 PneumoTool. Instrument educațional.</p>
+        <button
+          onClick={() => setMobileMenuOpen(v => !v)}
+          className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </header>
+
+      {/* ── MOBILE FULL-SCREEN MENU ── */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-20 bg-slate-900/98 backdrop-blur-sm pt-16 px-4 overflow-y-auto">
+          <div className="space-y-2 py-4">
+            {PAGES.map(({ id, label, Icon, gradient }) => {
+              const isActive = activeTabId === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => handleNav(id)}
+                  className={`w-full flex items-center px-4 py-4 rounded-xl transition-all text-left font-semibold border
+                    ${isActive
+                      ? 'bg-white/10 text-white border-white/10'
+                      : 'text-slate-400 border-transparent hover:bg-white/5 hover:text-white'}`}
+                >
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mr-4 flex-shrink-0
+                    ${isActive ? `bg-gradient-to-br ${gradient}` : 'bg-white/5'}`}>
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                  </div>
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── MAIN CONTENT ── */}
+      <main className="flex-1 overflow-y-auto h-screen flex flex-col">
+        <div className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full animate-page-in">
+          {activePage.component}
+        </div>
+        <footer className="px-8 py-5 border-t border-slate-200/60 text-center">
+          <p className="text-xs text-slate-400">© 2025 PneumoTool · Instrument educațional · Nu înlocuiește judecata clinică</p>
         </footer>
       </main>
 

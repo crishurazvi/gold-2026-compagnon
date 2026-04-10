@@ -183,9 +183,11 @@ export default function CopdCalculator() {
   };
 
   return (
-    <div className="w-full bg-slate-50 text-slate-800 font-sans p-4 md:p-8 rounded-3xl">
-      <header className="mb-8 flex items-center space-x-3">
-        <Activity className="w-8 h-8 text-blue-600" />
+    <div className="w-full text-slate-800 font-sans">
+      <header className="mb-8 flex items-center space-x-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 flex-shrink-0">
+          <Activity className="w-6 h-6 text-white" />
+        </div>
         <div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">GOLD COPD 2026</h2>
           <p className="text-sm text-slate-500 font-medium">Algoritm de decizie clinică (ABCD / E)</p>
@@ -198,7 +200,7 @@ export default function CopdCalculator() {
         <section className="lg:col-span-5 space-y-6">
           
           {/* Card 1: Spirometrie */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h2 className="flex items-center text-lg font-semibold mb-4 text-slate-800">
               <Activity className="w-5 h-5 mr-2 text-blue-500"/> 1. Spirometrie (Post-BD)
             </h2>
@@ -217,7 +219,7 @@ export default function CopdCalculator() {
           </div>
 
           {/* Card 2: Simptome & Exacerbari */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h2 className="flex items-center text-lg font-semibold mb-4 text-slate-800">
               <Heart className="w-5 h-5 mr-2 text-rose-500"/> 2. Clinic & Istoric
             </h2>
@@ -251,7 +253,7 @@ export default function CopdCalculator() {
           </div>
 
           {/* Card 3: Fenotip & Terapie */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h2 className="flex items-center text-lg font-semibold mb-4 text-slate-800">
               <Syringe className="w-5 h-5 mr-2 text-teal-500"/> 3. Fenotip & Tratament
             </h2>
@@ -336,13 +338,13 @@ export default function CopdCalculator() {
             <>
               {/* Classification Badges */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Stadiu Spirometric</p>
                     <p className="text-3xl font-black text-slate-800">GOLD {result.goldGrade}</p>
                   </div>
-                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
-                    <Activity className="w-6 h-6 text-slate-500"/>
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20">
+                    <Activity className="w-6 h-6 text-white"/>
                   </div>
                 </div>
 
@@ -386,7 +388,9 @@ export default function CopdCalculator() {
               )}
 
               {/* Main Treatment Recommendation */}
-              <div className="bg-blue-600 p-6 rounded-2xl shadow-lg shadow-blue-600/20 text-white transform transition-all duration-300">
+              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 rounded-2xl shadow-lg shadow-blue-600/25 text-white relative overflow-hidden transform transition-all duration-300">
+                <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/5 rounded-full pointer-events-none" />
+                <div className="absolute -bottom-8 -left-4 w-24 h-24 bg-white/5 rounded-full pointer-events-none" />
                 <p className="text-blue-200 font-semibold text-sm uppercase tracking-wider mb-2">
                   {data.isTreatmentNaive ? "Tratament Inițial Recomandat" : "Decizie Follow-up (GOLD 2026)"}
                 </p>
@@ -406,7 +410,7 @@ export default function CopdCalculator() {
 
               {/* Add-ons / Biologics */}
               {result.recommendations.addons.length > 0 && (
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-purple-200">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-purple-100">
                   <h3 className="text-lg font-bold text-purple-900 flex items-center mb-4">
                     <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
                       <Syringe className="w-4 h-4 text-purple-600" />

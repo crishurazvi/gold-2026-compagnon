@@ -156,17 +156,19 @@ export default function InhalerGallery() {
   });
 
   return (
-    <div className="w-full bg-slate-50 text-slate-800 font-sans p-4 md:p-8 rounded-3xl">
+    <div className="w-full text-slate-800 font-sans">
       <header className="mb-8">
-        <div className="flex items-center space-x-3 mb-2">
-          <BookOpen className="w-8 h-8 text-cyan-600" />
+        <div className="flex items-center space-x-4 mb-2">
+          <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-rose-600 rounded-2xl flex items-center justify-center shadow-lg shadow-pink-500/25 flex-shrink-0">
+            <BookOpen className="w-6 h-6 text-white" />
+          </div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Ghid Inhalatoare</h2>
         </div>
-        <p className="text-sm text-slate-500 font-medium">Bază de date vizuală pentru educarea tehnicii corecte de administrare.</p>
+        <p className="text-sm text-slate-500 font-medium pl-16">Bază de date vizuală pentru educarea tehnicii corecte de administrare.</p>
       </header>
 
       {/* CONTROLS AREA */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+      <div className="flex flex-col md:flex-row gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
         {/* Search */}
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
@@ -202,10 +204,10 @@ export default function InhalerGallery() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredInhalers.length > 0 ? (
           filteredInhalers.map((inhaler) => (
-            <div key={inhaler.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 group">
+            <div key={inhaler.id} className="bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group">
               
               {/* Card Header */}
-              <div className="p-5 border-b border-slate-100">
+              <div className="p-5 border-b border-slate-50">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-xl font-bold text-slate-800 group-hover:text-cyan-700 transition-colors">{inhaler.name}</h3>
                   <span className={`px-2 py-1 rounded text-xs font-bold ${

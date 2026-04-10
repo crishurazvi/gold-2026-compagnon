@@ -35,9 +35,11 @@ export default function NoduleCalculator() {
   };
 
   return (
-    <div className="w-full bg-slate-50 text-slate-800 font-sans p-4 md:p-8 rounded-3xl">
-      <header className="mb-8 flex items-center space-x-3">
-        <Scan className="w-8 h-8 text-indigo-600" />
+    <div className="w-full text-slate-800 font-sans">
+      <header className="mb-8 flex items-center space-x-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/25 flex-shrink-0">
+          <Scan className="w-6 h-6 text-white" />
+        </div>
         <div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Management Noduli Pulmonari</h2>
           {/* FIX: Am inlocuit > cu &gt; */}
@@ -48,7 +50,7 @@ export default function NoduleCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* INPUTS */}
         <section className="lg:col-span-5 space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-5">
             
             {/* 1. Dimensiune */}
             <div>

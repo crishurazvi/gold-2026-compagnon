@@ -107,9 +107,11 @@ export default function AsthmaManager() {
   };
 
   return (
-    <div className="w-full bg-slate-50 text-slate-800 font-sans p-4 md:p-8 rounded-3xl">
-      <header className="mb-8 flex items-center space-x-3">
-        <Wind className="w-8 h-8 text-blue-600" />
+    <div className="w-full text-slate-800 font-sans">
+      <header className="mb-8 flex items-center space-x-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-sky-600 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-500/25 flex-shrink-0">
+          <Wind className="w-6 h-6 text-white" />
+        </div>
         <div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Management Astm (GINA 2024)</h2>
           <p className="text-sm text-slate-500 font-medium">Evaluarea Controlului & Abordarea MART (Track 1)</p>
@@ -122,7 +124,7 @@ export default function AsthmaManager() {
         <section className="lg:col-span-6 space-y-6">
           
           {/* Partea 1: Evaluare Control (4 întrebări) */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center">
               <CheckCircle2 className="w-4 h-4 mr-2" /> 1. Evaluarea Controlului (Ultimele 4 săptămâni)
             </h3>
@@ -164,7 +166,7 @@ export default function AsthmaManager() {
           </div>
 
           {/* Partea 2: Tratament Curent */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center">
               <Stethoscope className="w-4 h-4 mr-2" /> 2. Tratament Curent
             </h3>
@@ -220,7 +222,9 @@ export default function AsthmaManager() {
           )}
 
           {/* Card Recomandare Tratament GINA */}
-          <div className="bg-blue-600 p-6 rounded-2xl shadow-lg shadow-blue-600/20 text-white transform transition-all duration-300">
+          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 rounded-2xl shadow-lg shadow-blue-600/25 text-white relative overflow-hidden transform transition-all duration-300">
+            <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/5 rounded-full pointer-events-none" />
+            <div className="absolute -bottom-8 -left-4 w-24 h-24 bg-white/5 rounded-full pointer-events-none" />
             <p className="text-blue-200 font-semibold text-xs uppercase tracking-wider mb-2">
               Tratament Recomandat (Track 1 Preferat)
             </p>

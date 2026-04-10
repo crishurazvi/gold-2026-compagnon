@@ -115,9 +115,11 @@ export default function SpirometryAnalyzer() {
   };
 
   return (
-    <div className="w-full bg-slate-50 text-slate-800 font-sans p-4 md:p-8 rounded-3xl">
-      <header className="mb-8 flex items-center space-x-3">
-        <Wind className="w-8 h-8 text-teal-600" />
+    <div className="w-full text-slate-800 font-sans">
+      <header className="mb-8 flex items-center space-x-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-500/25 flex-shrink-0">
+          <Wind className="w-6 h-6 text-white" />
+        </div>
         <div>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Analizor Spirometrie ATS/ERS</h2>
           <p className="text-sm text-slate-500 font-medium">Interpretare automată volume și difuziune</p>
@@ -130,7 +132,7 @@ export default function SpirometryAnalyzer() {
         <section className="lg:col-span-5 space-y-6">
           
           {/* Flux și Volume Dinamice */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center">
               <Activity className="w-4 h-4 mr-2" /> Flux & Volume
             </h3>
@@ -156,7 +158,7 @@ export default function SpirometryAnalyzer() {
           </div>
 
           {/* Pletismografie & Difuziune */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Volume Statice & Difuziune</h3>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -205,7 +207,7 @@ export default function SpirometryAnalyzer() {
 
               {/* Parametrii Card */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Severitate Obstrucție</p>
                   <p className={`text-2xl font-bold ${result.severityColor}`}>
                     {result.severity}
@@ -213,7 +215,7 @@ export default function SpirometryAnalyzer() {
                   <p className="text-xs text-slate-400 mt-2 font-medium">Bazat pe FEV1 % prezis</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Interpretare DLCO</p>
                   <p className={`text-2xl font-bold ${result.dlcoColor}`}>
                     {result.dlcoStatus}
