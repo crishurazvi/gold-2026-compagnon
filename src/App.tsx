@@ -21,12 +21,12 @@ interface Page {
 }
 
 const PAGES: Page[] = [
-  { id: 'copd',    label: 'BPOC (GOLD)',       Icon: Activity,   gradient: 'from-blue-400 to-blue-600',    component: <CopdCalculator /> },
-  { id: 'asthma',  label: 'Astm (GINA)',        Icon: Wind,       gradient: 'from-cyan-400 to-sky-600',     component: <AsthmaManager /> },
-  { id: 'spiro',   label: 'Spirometrie',         Icon: LayoutGrid, gradient: 'from-teal-400 to-emerald-600', component: <SpirometryAnalyzer /> },
-  { id: 'sleep',   label: 'Somnologie',          Icon: Moon,       gradient: 'from-violet-400 to-purple-600',component: <SleepApneaScreening /> },
-  { id: 'nodule',  label: 'Noduli (Fleischner)', Icon: Scan,       gradient: 'from-orange-400 to-rose-500',  component: <NoduleCalculator /> },
-  { id: 'inhaler', label: 'Ghid Inhalatoare',    Icon: BookOpen,   gradient: 'from-pink-400 to-rose-600',   component: <InhalerGallery /> },
+  { id: 'copd',    label: 'BPOC (GOLD)',       Icon: Activity,   gradient: 'from-blue-400 to-blue-600',     component: <CopdCalculator /> },
+  { id: 'asthma',  label: 'Astm (GINA)',        Icon: Wind,       gradient: 'from-cyan-400 to-sky-600',      component: <AsthmaManager /> },
+  { id: 'spiro',   label: 'Spirometrie',         Icon: LayoutGrid, gradient: 'from-teal-400 to-emerald-600',  component: <SpirometryAnalyzer /> },
+  { id: 'sleep',   label: 'Somnologie',          Icon: Moon,       gradient: 'from-violet-400 to-purple-600', component: <SleepApneaScreening /> },
+  { id: 'nodule',  label: 'Noduli (Fleischner)', Icon: Scan,       gradient: 'from-orange-400 to-rose-500',   component: <NoduleCalculator /> },
+  { id: 'inhaler', label: 'Ghid Inhalatoare',    Icon: BookOpen,   gradient: 'from-pink-400 to-rose-600',     component: <InhalerGallery /> },
 ];
 
 export default function App() {
